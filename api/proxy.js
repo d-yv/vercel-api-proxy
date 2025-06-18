@@ -1,10 +1,9 @@
 export default async function handler(req, res) {
   const API_TOKEN = process.env.GETIP_API_TOKEN;
   const ip = req.query.q;
-  console.log(ip);
 
   try {
-    const response = await fetch(`https://ipinfo.io/${ip}?`, {
+    const response = await fetch(`https://ipinfo.io/${ip}json?`, {
       headers: {
         Authorization: `Bearer ${API_TOKEN}`,
       },
