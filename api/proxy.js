@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   const ip = req.query.q;
 
   try {
-    const response = await fetch(`https://ipinfo.io/${ip}json?`, {
+    const response = await fetch(`https://ipinfo.io/${ip}/json`, {
       headers: {
         Authorization: `Bearer ${API_TOKEN}`,
       },
