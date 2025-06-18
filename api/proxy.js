@@ -1,4 +1,6 @@
 export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // или укажи свой GitHub Pages адрес
+  res.setHeader("Access-Control-Allow-Methods", "GET");
   const API_TOKEN = process.env.GETIP_API_TOKEN;
   const ip = req.query.q;
 
