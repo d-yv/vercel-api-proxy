@@ -1,44 +1,42 @@
+import axios from "axios";
+
 export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // или укажи свой GitHub Pages адрес
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
-  const { source, q } = req.query;
-
-  let apiUrl = "";
-  let headers = {};
-
-  switch (source) {
-    case "pixabay":
-      const queryString = new URLSearchParams({
-        key: process.env.PIXABAY_TOKEN,
-        ...params, // всё, что передали с клиента (q, page, per_page и т.д.)
-      }).toString();
-
-      apiUrl = `https://pixabay.com/api/?${queryString}`;
-
-      break;
-
-    case "getip":
-      apiUrl = `https://ipinfo.io/${q}/json`;
-      headers = {
-        Authorization: `Bearer ${process.env.GETIP_TOKEN}`,
-      };
-      break;
-
-    //case "":
-    //apiUrl = ``;
-    //headers:{}
-    //break;
-
-    default:
-      return res.status(400).json({ error: "Unknown source" });
-  }
+  const { source, ...params } = req.query;
+  let url = "";
+  let options = {};
 
   try {
-    const response = await fetch(apiUrl, { headers });
-    const data = await response.json();
-    res.status(200).json(data);
+    switch (source) {
+      case "pixabay":
+        url = "https://pixabay.com/api/";
+        options = {
+          params: {
+            key: process.env.PIXABAY_TOKEN,
+            ...params,
+          },
+        };
+        break;
+
+      case "getip":
+        url = `https://ipinfo.io/${params.q}/json`;
+        options = {
+          headers: {
+            Authorization: `Bearer ${process.env.GETIP_TOKEN}`,
+          },
+        };
+        break;
+
+      default:
+        return res.status(400).json({ error: "Unknown source" });
+    }
+
+    const response = await axios.get(url, options);
+    res.status(200).json(response.data);
   } catch (error) {
+    console.error(error.message);
     res.status(500).json({ error: "Ошибка при обращении к API" });
   }
 }
