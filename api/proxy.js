@@ -9,7 +9,13 @@ export default async function handler(req, res) {
 
   switch (source) {
     case "pixabay":
-      apiUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_TOKEN}&q=${q}`;
+      const queryString = new URLSearchParams({
+        key: process.env.PIXABAY_TOKEN,
+        ...params, // всё, что передали с клиента (q, page, per_page и т.д.)
+      }).toString();
+
+      apiUrl = `https://pixabay.com/api/?${queryString}`;
+
       break;
 
     case "getip":
