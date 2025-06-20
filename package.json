@@ -1,8 +1,5 @@
 {
     "name": "vercel-api-proxy",
     "version": "1.0.0",
-    "type": "module",
-    "dependencies": {
-        "vercel": "^43.2.0"
-    }
+    "type": "module"
 }

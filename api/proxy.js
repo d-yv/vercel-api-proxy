@@ -1,19 +1,36 @@
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*"); // или укажи свой GitHub Pages адрес
   res.setHeader("Access-Control-Allow-Methods", "GET");
-  const API_TOKEN = process.env.GETIP_API_TOKEN;
-  const ip = req.query.q;
+
+  const { source, q } = req.query;
+
+  let apiUrl = "";
+  let headers = {};
+
+  switch (source) {
+    case "pixabay":
+      apiUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_TOKEN}&q=${q}&image_type=photo`;
+      break;
+
+    case "getip":
+      apiUrl = `https://ipinfo.io/${ip}/json`;
+      headers: {
+        Authorization: `Bearer ${process.env.GETIP_TOKEN}`,
+      break;
+
+    //case "":
+    //apiUrl = ``;
+    //break;
+
+    default:
+      return res.status(400).json({ error: "Unknown source" });
+  }
 
   try {
-    const response = await fetch(`https://ipinfo.io/${ip}/json`, {
-      headers: {
-        Authorization: `Bearer ${API_TOKEN}`,
-      },
-    });
-
+    const response = await fetch(apiUrl, { headers });
     const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Ошибка при запросе к API" });
+    res.status(500).json({ error: "Ошибка при обращении к API" });
   }
 }
