@@ -9,17 +9,19 @@ export default async function handler(req, res) {
 
   switch (source) {
     case "pixabay":
-      apiUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_TOKEN}&q=${q}&image_type=photo`;
+      apiUrl = `https://pixabay.com/api/?key=${process.env.PIXABAY_TOKEN}&q=${q}`;
       break;
 
     case "getip":
-      apiUrl = `https://ipinfo.io/${ip}/json`;
-      headers: {
+      apiUrl = `https://ipinfo.io/${q}/json`;
+      headers = {
         Authorization: `Bearer ${process.env.GETIP_TOKEN}`,
+      };
       break;
 
     //case "":
     //apiUrl = ``;
+    //headers:{}
     //break;
 
     default:
