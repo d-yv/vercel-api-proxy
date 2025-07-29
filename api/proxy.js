@@ -32,6 +32,7 @@ export default async function handler(req, res) {
       case "tmdb":
         url = "https://api.themoviedb.org/3/search/movie";
         options = {
+          params,
           headers: {
             accept: "application/json",
             Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
