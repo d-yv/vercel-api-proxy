@@ -29,6 +29,16 @@ export default async function handler(req, res) {
         };
         break;
 
+      case "tmdb":
+        url = "https://api.themoviedb.org/3/search/movie";
+        options = {
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+          },
+        };
+        break;
+
       default:
         return res.status(400).json({ error: "Unknown source" });
     }
